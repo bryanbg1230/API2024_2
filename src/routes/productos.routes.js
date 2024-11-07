@@ -28,7 +28,7 @@ router.get('/productos',getProductos)  //select
 router.get('/productos/:id',getproductosxid)  //select x id
 router.post('/productos',upload.single('image'),postProducto)  //insert
 router.put('/productos/:id',putProducto)  //update
-router.patch('/productos/:id',patchProducto)  //update
+router.patch('/productos/:id',upload.single('image'),patchProducto)  //update
 router.delete('/productos/:id',deleteProducto)  //delete
 
 export default router
