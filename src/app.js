@@ -19,7 +19,7 @@ const corsOptions={
     credentials:true
 }
 
-app.set('json spaces', 2); // Define la sangría para JSON en modo de desarrollo
+//app.set('json spaces', 2); // Define la sangría para JSON en modo de desarrollo
 
 app.use(cors(corsOptions))
 app.use(express.json());//para que interprete los objetos json
