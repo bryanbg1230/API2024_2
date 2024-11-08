@@ -39,6 +39,7 @@ async (req,res)=>{
             id:rows.insertId
         })
     } catch (error) {
+        console.log("Error en postProducto:", error);
         return res.status(500).json({message:'error del lado del servidor'})
     }
 }
