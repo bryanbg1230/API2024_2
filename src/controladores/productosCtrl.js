@@ -31,6 +31,13 @@ async (req,res)=>{
         const prod_imagen = req.file ? `/uploads/${req.file.filename}`:null; //capturar la imagen que se envie en un formulario
         console.log("Datos del producto:",req.body);
         console.log("Archivo de imagen:",req.file);
+
+        // Preparar datos para insertar en la base de datos
+        const productoData = [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen];
+        
+        // Log para confirmar los datos que se intentarán guardar en la base de datos
+        console.log("Guardando producto en la base de datos:", productoData);
+        
         //console.log(cli_nombre)
         const [rows]=await conmysql.query('insert into productos (prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen) values(?,?,?,?,?,?)',
             [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen])
