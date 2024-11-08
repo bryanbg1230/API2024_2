@@ -95,7 +95,10 @@ async(req,res)=>{
             id:0,
             message: "No pudo eliminar el cliente"
         })
-        res.sendStatus(202)
+        //res.sendStatus(202)
+        return res.status(200).json({
+          message: "Cliente eliminado correctamente"
+        });
     } catch (error) {
         return res.status(500).json({message:"Error del lado del servidor"})
     }
