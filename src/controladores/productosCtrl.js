@@ -124,13 +124,20 @@ async (req,res)=>{
 export const deleteProducto=
 async(req, res)=>{
     try {
+        console.log("ID recibido para eliminación:", req.params.id);  //CONSOLA PUESTA
         const [rows]=await conmysql.query('delete from productos where prod_id=?',[req.params.id])
-        if (rows.affectedRows<=0)return res.status(404).json({
-            id:0,
-            message:"No pudo eliminar el producto"
-        })
+        console.log("Resultado de la consulta:", rows);   //CONSOLA PUESTA
+        if (rows.affectedRows <= 0) {
+            console.log("No se encontró el producto para eliminar.");  //CONSOLA PUESTA
+            return res.status(404).json({
+                id: 0,
+                message: "No pudo eliminar el producto"
+            });
+        }
+        console.log("Producto eliminado con éxito.");   //CONSOLA PUESTA
         res.sendStatus(202)
     } catch (error) {
+        console.error("Error en el servidor:", error);   //CONSOLA PUESTA
         return res.status(500).json({
             message:error
         
