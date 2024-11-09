@@ -135,7 +135,8 @@ async(req, res)=>{
             });
         }
         console.log("Producto eliminado con éxito.");   //CONSOLA PUESTA
-        res.sendStatus(202)
+        //res.sendStatus(202)
+        res.status(202).json({ message: "Producto eliminado" });
     } catch (error) {
         console.error("Error en el servidor:", error);   //CONSOLA PUESTA
         return res.status(500).json({
