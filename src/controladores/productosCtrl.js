@@ -55,21 +55,27 @@ export const putProducto=
 async (req,res)=>{
     try {
         const {id}=req.params
+        console.log("ID del producto a actualizar:", id);  //CONSOLA PUESTA
+        console.log("Datos recibidos en el cuerpo de la solicitud:", req.body);   //CONSOLA PUESTA
         //console.log(req.body)
         const {prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen}=req.body
         //console.log(cli_nombre)
         const [result]=await conmysql.query('update productos set prod_codigo=?, prod_nombre=?, prod_stock=?, prod_precio=?, prod_activo=?, prod_imagen=? where prod_id=?',
             [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen, id])
 
-        if(result.affectedRows<=0)return res.status(404).json({
-            message:'Producto no encontrado'
-        })
+        console.log("Resultado de la actualización:", result);   //CONSOLA PUESTA
+        if (result.affectedRows <= 0) {
+          console.warn("No se encontró el producto o no se realizaron cambios.");   //CONSOLA PUESTA
+          return res.status(404).json({ message: 'Producto no encontrado' });
+        }
         const[rows]=await conmysql.query('select * from productos where prod_id=?',[id])
+        console.log("Datos del producto después de la actualización:", rows[0]);   //CONSOLA PUESTA
         res.json(rows[0])
         /* res.send({
             id:rows.insertId
         }) */
     } catch (error) {
+        console.error("Error en putProducto:", error);   //CONSOLA PUESTA
         return res.status(500).json({message:'error del lado del servidor'})
     }
 }
