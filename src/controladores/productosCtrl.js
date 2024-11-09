@@ -66,7 +66,7 @@ async (req,res)=>{
         // Actualiza `prod_imagen` solo si hay una imagen nueva
         let prod_imagen;                                                      //------------------De aquí
         if (req.file) {
-            prod_imagen = `/uploads/${req.file.filename}`;
+            prod_imagen = `${req.file.filename}`;
         }
 
         // Prepara la consulta SQL según la disponibilidad de `prod_imagen`
