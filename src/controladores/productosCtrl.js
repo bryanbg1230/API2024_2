@@ -57,8 +57,22 @@ async (req,res)=>{
         const {id}=req.params
         console.log("ID del producto a actualizar:", id);  //CONSOLA PUESTA
         console.log("Datos recibidos en el cuerpo de la solicitud:", req.body);   //CONSOLA PUESTA
+        console.log("Archivo de imagen recibido:", req.file);   //CONSOLA PUESTA
         //console.log(req.body)
-        const {prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen}=req.body
+        // Extraer los campos de req.body y manejar la imagen si existe
+        const { prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo } = req.body;
+        const prod_imagen = req.file ? `/uploads/${req.file.filename}` : null;
+
+        // Log de datos para confirmar los datos que se enviarán en la consulta
+        console.log("Datos para actualizar en la base de datos:", {
+          prod_codigo,
+          prod_nombre,
+          prod_stock,
+          prod_precio,
+          prod_activo,
+          prod_imagen,
+        });
+        
         //console.log(cli_nombre)
         const [result]=await conmysql.query('update productos set prod_codigo=?, prod_nombre=?, prod_stock=?, prod_precio=?, prod_activo=?, prod_imagen=? where prod_id=?',
             [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen, id])
