@@ -79,7 +79,10 @@ async (req,res)=>{
             // Si no hay imagen nueva, omitimos `prod_imagen` de la consulta
             query = 'UPDATE productos SET prod_codigo=?, prod_nombre=?, prod_stock=?, prod_precio=?, prod_activo=? WHERE prod_id=?';
             values = [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, id];
-        }                                                                      //------------------Hasta aqui se puso esto nuevo
+        } 
+
+        // Ejecuta la consulta
+        const [result] = await conmysql.query(query, values);                                 //------------------Hasta aqui se puso esto nuevo
 
         // Log de datos para confirmar los datos que se enviarán en la consulta
         console.log("Datos para actualizar en la base de datos:", { prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen, });
