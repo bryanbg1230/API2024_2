@@ -61,21 +61,32 @@ async (req,res)=>{
         //console.log(req.body)
         // Extraer los campos de req.body y manejar la imagen si existe
         const { prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo } = req.body;
-        const prod_imagen = req.file ? `/uploads/${req.file.filename}` : null;
+        //const prod_imagen = req.file ? `/uploads/${req.file.filename}` : null;       Estaba esto antes de modificar
+
+        // Actualiza `prod_imagen` solo si hay una imagen nueva
+        let prod_imagen;                                                      //------------------De aquí
+        if (req.file) {
+            prod_imagen = `/uploads/${req.file.filename}`;
+        }
+
+        // Prepara la consulta SQL según la disponibilidad de `prod_imagen`
+        let query, values;
+        if (prod_imagen) {
+            // Si hay imagen nueva, incluimos `prod_imagen` en la consulta
+            query = 'UPDATE productos SET prod_codigo=?, prod_nombre=?, prod_stock=?, prod_precio=?, prod_activo=?, prod_imagen=? WHERE prod_id=?';
+            values = [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen, id];
+        } else {
+            // Si no hay imagen nueva, omitimos `prod_imagen` de la consulta
+            query = 'UPDATE productos SET prod_codigo=?, prod_nombre=?, prod_stock=?, prod_precio=?, prod_activo=? WHERE prod_id=?';
+            values = [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, id];
+        }                                                                      //------------------Hasta aqui se puso esto nuevo
 
         // Log de datos para confirmar los datos que se enviarán en la consulta
-        console.log("Datos para actualizar en la base de datos:", {
-          prod_codigo,
-          prod_nombre,
-          prod_stock,
-          prod_precio,
-          prod_activo,
-          prod_imagen,
-        });
+        console.log("Datos para actualizar en la base de datos:", { prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen, });
         
         //console.log(cli_nombre)
-        const [result]=await conmysql.query('update productos set prod_codigo=?, prod_nombre=?, prod_stock=?, prod_precio=?, prod_activo=?, prod_imagen=? where prod_id=?',
-            [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen, id])
+        /* const [result]=await conmysql.query('update productos set prod_codigo=?, prod_nombre=?, prod_stock=?, prod_precio=?, prod_activo=?, prod_imagen=? where prod_id=?',
+            [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen, id])       Estaba antes de modificar    */
 
         console.log("Resultado de la actualización:", result);   //CONSOLA PUESTA
         if (result.affectedRows <= 0) {
