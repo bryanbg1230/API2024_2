@@ -28,7 +28,7 @@ async (req,res)=>{
     try {
         //console.log(req.body)
         const {prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo}=req.body
-        const prod_imagen = req.file ? /uploads/${req.file.filename}:null; //capturar la imagen que se envie en un formulario
+        const prod_imagen = req.file ? `/uploads/${req.file.filename}` : null;; //capturar la imagen que se envie en un formulario
         console.log("Datos del producto:",req.body);
         console.log("Archivo de imagen:",req.file);
 
