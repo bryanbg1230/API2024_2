@@ -1,13 +1,4 @@
 import {conmysql} from '../db.js'
-import { v2 as cloudinary } from 'cloudinary';
-
-// Configurar Cloudinary
-cloudinary.config({
-  cloud_name: 'ddvrhqgsm',  // Reemplaza con tu Cloud Name
-  api_key: '113551118694466',        // Reemplaza con tu API Key
-  api_secret: '4zk8XUMg2Fkc2Hk0qJMlbLtCZh4'   // Reemplaza con tu API Secret
-})
-
 export const getProductos=
     async (req,res)=>{
         try {
@@ -37,20 +28,9 @@ async (req,res)=>{
     try {
         //console.log(req.body)
         const {prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo}=req.body
-        /* const prod_imagen = req.file ? `/uploads/${req.file.filename}`:null; //capturar la imagen que se envie en un formulario
+        const prod_imagen = req.file ? /uploads/${req.file.filename}:null; //capturar la imagen que se envie en un formulario
         console.log("Datos del producto:",req.body);
-        console.log("Archivo de imagen:",req.file); */
-
-        let prod_imagen = null;
-
-        // Subir la imagen a Cloudinary si se proporciona
-        if (req.file) {
-            const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-                folder: 'uploads', // Opcional: carpeta en Cloudinary
-                public_id: `${Date.now()}-${req.file.originalname}` // Nombre único
-            });
-            prod_imagen = uploadResult.secure_url;
-        }
+        console.log("Archivo de imagen:",req.file);
 
         // Preparar datos para insertar en la base de datos
         const productoData = [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen];
@@ -81,36 +61,22 @@ async (req,res)=>{
         //console.log(req.body)
         // Extraer los campos de req.body y manejar la imagen si existe
         const { prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo } = req.body;
-        //const prod_imagen = req.file ? `/uploads/${req.file.filename}` : null;       Estaba esto antes de modificar
+        //const prod_imagen = req.file ? /uploads/${req.file.filename} : null;       Estaba esto antes de modificar
 
-        // Actualiza `prod_imagen` solo si hay una imagen nueva
-        /* let prod_imagen;                                                      //------------------De aquí
+        // Actualiza prod_imagen solo si hay una imagen nueva
+        let prod_imagen;                                                      //------------------De aquí
         if (req.file) {
-            prod_imagen = `/uploads/${req.file.filename}`;
-        } */
-
-        let newProd_imagen = prod_imagen; // Si ya se pasó una URL de imagen, la usaremos
-
-        // Verificar si se subió una nueva imagen
-        if (req.file) {
-            // Subir la nueva imagen a Cloudinary
-            const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-                folder: 'uploads',
-                public_id: `${Date.now()}-${req.file.originalname}` // Usar un nombre único
-            });
-
-            // Obtener la URL segura de la imagen subida
-            newProd_imagen = uploadResult.secure_url;
+            prod_imagen = /uploads/${req.file.filename};
         }
 
-        // Prepara la consulta SQL según la disponibilidad de `prod_imagen`
+        // Prepara la consulta SQL según la disponibilidad de prod_imagen
         let query, values;
         if (prod_imagen) {
-            // Si hay imagen nueva, incluimos `prod_imagen` en la consulta
+            // Si hay imagen nueva, incluimos prod_imagen en la consulta
             query = 'UPDATE productos SET prod_codigo=?, prod_nombre=?, prod_stock=?, prod_precio=?, prod_activo=?, prod_imagen=? WHERE prod_id=?';
             values = [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, prod_imagen, id];
         } else {
-            // Si no hay imagen nueva, omitimos `prod_imagen` de la consulta
+            // Si no hay imagen nueva, omitimos prod_imagen de la consulta
             query = 'UPDATE productos SET prod_codigo=?, prod_nombre=?, prod_stock=?, prod_precio=?, prod_activo=? WHERE prod_id=?';
             values = [prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo, id];
         } 
@@ -149,7 +115,7 @@ async (req,res)=>{
         //console.log(req.body)
         const {prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo}=req.body
         // Obtener la nueva imagen si se envía; si no, se conserva la actual
-        const prod_imagen = req.file ? `/uploads/${req.file.filename}` : null;
+        const prod_imagen = req.file ? /uploads/${req.file.filename} : null;
         console.log("Datos del producto:", req.body);
         console.log("Archivo de imagen:", req.file);
         //console.log(prod_nombre)
