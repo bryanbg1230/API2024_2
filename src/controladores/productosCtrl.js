@@ -115,7 +115,7 @@ async (req,res)=>{
         //console.log(req.body)
         const {prod_codigo, prod_nombre, prod_stock, prod_precio, prod_activo}=req.body
         // Obtener la nueva imagen si se envía; si no, se conserva la actual
-        const prod_imagen = req.file ? /uploads/${req.file.filename} : null;
+        const prod_imagen = req.file ? `/uploads/${req.file.filename}` : null;
         console.log("Datos del producto:", req.body);
         console.log("Archivo de imagen:", req.file);
         //console.log(prod_nombre)
